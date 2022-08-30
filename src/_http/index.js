@@ -21,17 +21,24 @@ function HttpClient(options) {
 
   // HTTP2 adapter is applicable only if it's NodeJS env and
   // no fetch API override provided (to preserve backward-compatibility).
-  var useHttp2Adapter = !options.fetch && util.isNodeEnv() && isHttp2Supported()
 
-  this._adapter = useHttp2Adapter
-    ? new (require('./http2Adapter'))({
-        http2SessionIdleTime: options.http2SessionIdleTime,
-      })
-    : new (require('./fetchAdapter'))({
-        isHttps: isHttps,
-        fetch: options.fetch,
-        keepAlive: options.keepAlive,
-      })
+  // var useHttp2Adapter = !options.fetch && util.isNodeEnv() && isHttp2Supported()
+
+  // this._adapter = useHttp2Adapter
+  //   ? new (require('./http2Adapter'))({
+  //       http2SessionIdleTime: options.http2SessionIdleTime,
+  //     })
+  //   : new (require('./fetchAdapter'))({
+  //       isHttps: isHttps,
+  //       fetch: options.fetch,
+  //       keepAlive: options.keepAlive,
+  //     })
+
+  this._adapter = new (require('./fetchAdapter'))({
+    isHttps: isHttps,
+    fetch: options.fetch,
+    keepAlive: options.keepAlive,
+  })
 
   if (options.endpoint === null) {
     this._baseUrl = options.scheme + '://' + options.domain + ':' + options.port
